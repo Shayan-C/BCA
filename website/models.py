@@ -14,3 +14,13 @@ class Record(models.Model):
 
 	def __str__(self):
 		return(f"{self.first_name} {self.last_name}")
+	
+class TranRec(models.Model):
+	date     = models.DateField()
+	material = models.CharField(max_length=50)
+	quantity = models.BigIntegerField()
+	price    = models.BigIntegerField()
+	
+	def __str__(self):
+		return(f"{self.first_name} {self.last_name}")
+	

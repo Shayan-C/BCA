@@ -2,6 +2,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.models import User
 from django import forms
 from .models import Record
+from .models import TranRec
 
 class SignUpForm(UserCreationForm):
 	email = forms.EmailField(label="", widget=forms.TextInput(attrs={'class':'form-control', 'placeholder':'Email Address'}))
@@ -37,15 +38,15 @@ class SignUpForm(UserCreationForm):
 
 # Create Add Record Form
 class AddRecordForm(forms.ModelForm):
-	first_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"First Name", "class":"form-control"}), label="")
-	last_name = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Last Name", "class":"form-control"}), label="")
-	email = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Email", "class":"form-control"}), label="")
-	phone = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Phone", "class":"form-control"}), label="")
-	address = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Address", "class":"form-control"}), label="")
-	city = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"City", "class":"form-control"}), label="")
-	state = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"State", "class":"form-control"}), label="")
-	zipcode = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Zipcode", "class":"form-control"}), label="")
+	date = forms.DateField(required=True, input_formats=['%d-%m-%Y'])
+	material = forms.CharField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Material", "class":"form-control"}), label="")
+	quantity = forms.IntegerField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Quantity", "class":"form-control"}), label="")
+	price = forms.IntegerField(required=True, widget=forms.widgets.TextInput(attrs={"placeholder":"Price", "class":"form-control"}), label="")
 
 	class Meta:
-		model = Record
+		model = TranRec
 		exclude = ("user",)
+
+class DateRangeForm(forms.Form):
+    start_date = forms.DateField(label='Start Date', widget=forms.DateInput(attrs={'type': 'date'}))
+    end_date = forms.DateField(label='End Date', widget=forms.DateInput(attrs={'type': 'date'}))
