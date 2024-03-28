@@ -30,9 +30,12 @@
     <tr>
       <th scope="col">ID</th>
       <th scope="col">Date</th>
-      <th scope="col">Material</th>
+      <th scope="col">Customer</th>
+      <th scope="col">Product</th>
       <th scope="col">Quantity</th>
       <th scope="col">Price</th>
+      <th scope="col">Total Amount</th>
+
     </tr>
   </thead>
   <tbody>
@@ -42,12 +45,16 @@
 		<tr>
       <td><a href="{% url 'record' record.id %}">{{ record.id }}</a></td>
 			<td>{{ record.date }}</td>
-			<td>{{ record.material }}</td>
+      <td>{{ record.customer }}</td>
+      <td>{{ record.product }}</td>
 			<td>{{ record.quantity }}</td>
 			<td>{{ record.price }}</td>	
+      <td>{{ record.totamt }}</td>
 		</tr>
 	{% endfor %}
     <tr>
+      <td></td>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>

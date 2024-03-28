@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content%}
+
+
+<style>
+  .btn {
+    border: none;
+    background-color: inherit;
+    padding: 60px 50px;
+    font-size: 90px;
+    cursor: pointer;
+    display: inline-block;
+  }
+  
+  .btn:hover {background: #eee;}
+  
+  .add_rec {color: green;}
+  .see_report {color: dodgerblue;}
+  </style>
+
+<table class="table table-striped table-hover table-bordered">
+  <thead class="table-dark">
+    <tr>
+      <th scope="col">Customer</th>
+      <th scope="col">Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    
+{% if records %}
+	{% for record in records %}
+		<tr>
+      <td><a href="{% url 'record' record.customer %}">{{ record.customer }}</a></td>
+			<td>{{ record.cusdes }}</td>
+		</tr>
+	{% endfor %}
+
+{% endif %}
+
+	
+	  </tbody>
+	</table>
+
+
+{% endblock %}

@@ -1,9 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
-from .forms import SignUpForm, AddRecordForm, DateRangeForm
+from .forms import SignUpForm, AddRecordForm, DateRangeForm, AddCustomerForm, AddProductForm, AddTranRecordForm
 from .models import Record
 from .models import TranRec
+from .models import TranSacRec
+from .models import Customer
+from .models import Product
 from django.db import models
 
 
@@ -38,13 +41,15 @@ def ad(request):
             start_date = form.cleaned_data['start_date']
             end_date = form.cleaned_data['end_date']
             # Filter records based on the date range
-            filtered_records = TranRec.objects.filter(date__range=[start_date, end_date])
+            filtered_records = TranSacRec.objects.filter(date__range=[start_date, end_date])
 			   
             # Pass the filtered records to the template as context
             return render(request, 'ad.html', {'form': form, 'records': filtered_records, 'tot_amt' : filtered_records.aggregate(total=models.Sum('price'))['total'] })
     else:
             form = DateRangeForm()
     return render(request, 'ad.html', {'form': form})
+
+
             
 		    
 
@@ -99,14 +104,48 @@ def delete_record(request, pk):
 
 
 def add_record(request):
-	form = AddRecordForm(request.POST or None)
+
+	form = AddTranRecordForm(request.POST or None)
+	if request.user.is_authenticated:
+		if request.method == "POST":
+
+			if form.is_valid():
+				form.save()
+
+				messages.success(request, "Record Added...")
+				return redirect('home')
+			
+		return render(request, 'add_record.html', {'form':form})
+	else:
+		messages.success(request, "You Must Be Logged In...")
+
+		return redirect('home')
+	
+
+
+
+def add_product(request):
+	form = AddProductForm(request.POST or None)
 	if request.user.is_authenticated:
 		if request.method == "POST":
 			if form.is_valid():
-				add_record = form.save()
+				add_product = form.save()
 				messages.success(request, "Record Added...")
 				return redirect('home')
-		return render(request, 'add_record.html', {'form':form})
+		return render(request, 'add_product.html', {'form':form})
+	else:
+		messages.success(request, "You Must Be Logged In...")
+		return redirect('home')
+	
+def add_customer(request):
+	form = AddCustomerForm(request.POST or None)
+	if request.user.is_authenticated:
+		if request.method == "POST":
+			if form.is_valid():
+				add_customer = form.save()
+				messages.success(request, "Record Added...")
+				return redirect('home')
+		return render(request, 'add_customer.html', {'form':form})
 	else:
 		messages.success(request, "You Must Be Logged In...")
 		return redirect('home')
@@ -128,3 +167,11 @@ def update_record(request, pk):
 	else:
 		messages.success(request, "You Must Be Logged In...")
 		return redirect('home')
+	
+def listcust(request):
+    cus = Customer.objects.all()
+    return render(request, 'cus_list.html', {'records': cus})
+
+def listpro(request):
+    product = Product.objects.all()
+    return render(request, 'pro_list.html', {'records': product})
